@@ -1,4 +1,4 @@
-Package: ctpp_flows
+Package: ctppflows
 Type: Package
 Title: Census transportation planning package flows
 Version: 1.0
@@ -7,4 +7,4 @@ Author: Greg Macfarlane
 Maintainer: Greg Macfarlane <gregmacfarlane@gmail.com>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?
-Imports: RODBC, dplyr
+Imports: dplyr

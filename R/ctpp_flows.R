@@ -13,12 +13,15 @@
 # Then go to regedit  HKEY_LOCAL_MACHINE > SOFTWARE > Microsoft > Office > 
 # 14.0 > Common > FilesPaths >  and delete `mso.dll`.
 
-# point this to the CTPP flows file downloaded
-acc_file <- "L:/CTPP tracts/tract-flows.accdb"
-channel <-  RODBC::odbcConnectAccess2007(acc_file)
 
-df <- RODBC::sqlFetch(channel, "Tract-flows")
+## THIS IS THE SCRIPT USED TO EXTRACT THE R DATA FROM AN ACCESS DATABASE
+## It is commented to as not to break build scripts.
 
-ctpp_flows <- dplyr::tbl_df(df)
-
-save(ctpp_flows, file = "data/ctpp_flows.Rdata")
+#> acc_file <- "L:/CTPP tracts/tract-flows.accdb"
+#> channel <-  RODBC::odbcConnectAccess2007(acc_file)
+#> 
+#> df <- RODBC::sqlFetch(channel, "Tract-flows")
+#> 
+#> ctpp_flows <- dplyr::tbl_df(df)
+#> 
+#> save(ctpp_flows, file = "data/ctpp_flows.Rdata")
