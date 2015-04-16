@@ -8,3 +8,4 @@ Maintainer: Greg Macfarlane <gregmacfarlane@gmail.com>
 Description: More about what it does (maybe more than one line)
 License: MIT
 Imports: dplyr
+LazyData: true
