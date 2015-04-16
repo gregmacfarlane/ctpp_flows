@@ -13,34 +13,30 @@
 # Then go to regedit  HKEY_LOCAL_MACHINE > SOFTWARE > Microsoft > Office > 
 # 14.0 > Common > FilesPaths >  and delete `mso.dll`.
 
+acc_file <- "L:/CTPP tracts/tract-flows.accdb"
+channel <-  RODBC::odbcConnectAccess2007(acc_file)
 
-## THIS IS THE SCRIPT USED TO EXTRACT THE R DATA FROM AN ACCESS DATABASE
-## It is commented to as not to break build scripts.
+df <- RODBC::sqlFetch(channel, "Tract-flows")
 
-#> acc_file <- "L:/CTPP tracts/tract-flows.accdb"
-#> channel <-  RODBC::odbcConnectAccess2007(acc_file)
-#> 
-#> df <- RODBC::sqlFetch(channel, "Tract-flows")
-#> 
-#> ctpp_flows <- dplyr::tbl_df(df)
-#>
-#>ctpp_flows <- ctpp_flows %>%
-#>  mutate(
-#>    # fix FIPS code width
-#>    rstate = sprintf("%02d", Residence_State_FIPS_Code),
-#>    wstate = sprintf("%02d", Workplace_State_FIPS_Code),
-#>    rcnty = sprintf("%03d", Residence_County_FIPS_Code),
-#>    wcnty = sprintf("%03d", Workplace_County_FIPS_Code),
-#>    rtract = sprintf("%06d", Residence_Tract_FIPS_Code),
-#>    wtract = sprintf("%06d", Workplace_Tract_FIPS_Code)
-#>  ) %>%
-#>  transmute(
-#>    # concatenate FIPS code to GEOID format
-#>    residence = paste(rstate, rcnty, rtract, sep = ""),
-#>    workplace = paste(wstate, wcnty, wtract, sep = ""),
-#>    flow = EST,
-#>    flow_moe = MOE
-#>  )
-#>
-#> 
-#> save(ctpp_flows, file = "data/ctpp_flows.Rdata")
+ctpp_flows <- dplyr::tbl_df(df)
+
+ctpp_flows <- ctpp_flows %>%
+  mutate(
+    # fix FIPS code width
+    rstate = sprintf("%02d", Residence_State_FIPS_Code),
+    wstate = sprintf("%02d", Workplace_State_FIPS_Code),
+    rcnty = sprintf("%03d", Residence_County_FIPS_Code),
+    wcnty = sprintf("%03d", Workplace_County_FIPS_Code),
+    rtract = sprintf("%06d", Residence_Tract_FIPS_Code),
+    wtract = sprintf("%06d", Workplace_Tract_FIPS_Code)
+  ) %>%
+  transmute(
+    # concatenate FIPS code to GEOID format
+    residence = paste(rstate, rcnty, rtract, sep = ""),
+    workplace = paste(wstate, wcnty, wtract, sep = ""),
+    flow = EST,
+    flow_moe = MOE
+  )
+
+ 
+save(ctpp_flows, file = "data/ctpp_flows.Rdata")
