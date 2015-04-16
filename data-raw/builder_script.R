@@ -1,4 +1,6 @@
 # Read the CTPP tract flow data into R.
+library(RODBC)
+library(dplyr)
 
 # The RODBC library relies on a usable Access database driver, installed 
 # separately If the script doesn't try downloading the 64-bit driver from
@@ -14,11 +16,11 @@
 # 14.0 > Common > FilesPaths >  and delete `mso.dll`.
 
 acc_file <- "L:/CTPP tracts/tract-flows.accdb"
-channel <-  RODBC::odbcConnectAccess2007(acc_file)
+channel <-  odbcConnectAccess2007(acc_file)
 
-df <- RODBC::sqlFetch(channel, "Tract-flows")
+df <- sqlFetch(channel, "Tract-flows")
 
-ctpp_flows <- dplyr::tbl_df(df)
+ctpp_flows <- tbl_df(df)
 
 ctpp_flows <- ctpp_flows %>%
   mutate(
