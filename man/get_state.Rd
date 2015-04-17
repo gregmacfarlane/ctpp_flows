@@ -17,7 +17,7 @@ a character vector with the 2-digit state code.
 string.
 }
 \examples{
-get_state(ctpp_flows$residence)
+get_state(ctpp_flows$residence[1:10])
 }
 \seealso{
 \code{\link{get_county}}, \code{\link{get_tract}}
