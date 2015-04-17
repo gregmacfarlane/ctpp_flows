@@ -5,7 +5,10 @@ Version: 0.1
 Date: 2015-04-16
 Author: Greg Macfarlane
 Maintainer: Greg Macfarlane <gregmacfarlane@gmail.com>
-Description: More about what it does (maybe more than one line)
+Description: Home-to-work flows for all Census tracts in the United States 
+    assembled from the 2006-2010 responses to the American Community Survey and
+    available from the [FHWA website]. Also some helper functions to work 
+    easily with FIPS codes.
 License: MIT
 Imports: dplyr
 LazyData: true
