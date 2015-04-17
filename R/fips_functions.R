@@ -32,7 +32,7 @@ get_state <- function(fips){
 #' get_county(ctpp_flows$residence[1:10], with_state = TRUE)
 #' 
 #' @export
-#' @seealso \code{\link{get_county}}, \code{\link{get_tract}} 
+#' @seealso \code{\link{get_state}}, \code{\link{get_tract}} 
 #' 
 get_county <- function(fips, with_state = FALSE){
   if(with_state){
@@ -40,6 +40,34 @@ get_county <- function(fips, with_state = FALSE){
     substr(fips, 1, 5)
   } else {
     # digits 3 through 5 have county FIPS code
+    substr(fips, 3, 5)
+  }
+}
+
+#' Get the tract-level FIPS code
+#'
+#' \code{get_tract} returns the 6-digit tract FIPS code from a complete FIPS
+#' string.
+#' 
+#' @param fips A character vector of complete FIPS strings.
+#' @param with_state Include the 5-digit state and county code? Default 
+#'   \code{with_state = FALSE}. This returns the existing FIPS code.
+#' @return a character vector with the 6-digit county code, unless 
+#'   \code{with_state = TRUE} in which case a 11-digit state, county, and tract
+#'   code concatenation.
+#' @examples 
+#' get_tract(ctpp_flows$residence[1:10])
+#' get_tract(ctpp_flows$residence[1:10], with_state = TRUE)
+#' 
+#' @export
+#' @seealso \code{\link{get_county}}, \code{\link{get_state}} 
+#' 
+get_tract <- function(fips, with_state = FALSE){
+  if(with_state){
+    # return original
+    fips
+  } else {
+    # digits 6 through 11 have tract FIPS code
     substr(fips, 3, 5)
   }
 }

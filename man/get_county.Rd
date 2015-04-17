@@ -26,6 +26,6 @@ get_county(ctpp_flows$residence[1:10])
 get_county(ctpp_flows$residence[1:10], with_state = TRUE)
 }
 \seealso{
-\code{\link{get_county}}, \code{\link{get_tract}}
+\code{\link{get_state}}, \code{\link{get_tract}}
 }
 
