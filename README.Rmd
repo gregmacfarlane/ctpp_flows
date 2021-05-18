@@ -1,0 +1,62 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+library(tidyverse)
+```
+
+# ctppflows
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of ctppflows is to provide tract level home-work flow data from the 
+Census Transportation Planning Package (CTPP) in a much more convenient format
+for R users, particularly those without a Microsoft Access license.
+
+The entire tract dataset is included in the package as a documented R object,
+and the package also contains helper functions for properly calculating aggregate
+flows and their margins of error.
+
+## Installation
+
+You can install the development version of ctpp_flows from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("gregmacfarlane/ctpp_flows")
+```
+## Example
+
+After installing the library, the `ctpp_flows` dataset is available as a tibble
+lazy-loaded into your environment.
+
+```{r example}
+library(ctppflows)
+
+# load 
+ctpp_flows
+```
+
+The `aggregate_flows` function will aggregate the flows to a state or county.
+The aggregated margin of error is computed as
+
+$$ \sqrt{\sum_{i=1}^N MOE_i^2}$$
+
+The results can then be passed into other R formatting functions. 
+
+```{r pressure}
+aggregate_flows("state") %>%
+  filter(residence == "49") %>% #utah residents
+  filter(flow > 1000)
+```
+
