@@ -54,19 +54,46 @@ ctpp_flows
 The `aggregate_flows` function will aggregate the flows to a state or
 county. The aggregated margin of error is computed as
 
-$$\sqrt{\sum_{i=1}^N MOE_i^2}$$
-
-The results can then be passed into other R formatting functions.
+$$ \\sqrt{\\sum\_{i=1}^N MOE\_i^2}$$
 
 ``` r
-aggregate_flows("state") %>%
-  filter(residence == "49") %>% #utah residents
-  filter(flow > 1000)
-#> # A tibble: 3 x 4
-#> # Groups:   residence [1]
-#>   residence workplace    flow   moe
-#>   <chr>     <chr>       <int> <dbl>
-#> 1 49        06           2203  464.
-#> 2 49        32           1977  359.
-#> 3 49        49        1111666 7598.
+aggregate_flows("state")
+#> # A tibble: 2,312 x 4
+#> # Groups:   residence [52]
+#>    residence workplace    flow    moe
+#>    <chr>     <chr>       <int>  <dbl>
+#>  1 01        01        1651840 9895. 
+#>  2 01        02             25   31.3
+#>  3 01        04            135  100. 
+#>  4 01        05            356  180. 
+#>  5 01        06            587  289. 
+#>  6 01        08            170   93.2
+#>  7 01        09             55   35.3
+#>  8 01        10             20   31  
+#>  9 01        11             87  129. 
+#> 10 01        12           7089 1047. 
+#> # … with 2,302 more rows
 ```
+
+The results can then be passed into other R formatting functions. For
+instance, we could make a plot of where workers into Salt Lake County
+reside.
+
+``` r
+# get workplaces in salt lake county
+sl_workers <- ctpp_flows %>%
+  mutate(county = str_c(get_state(workplace), get_county(workplace))) %>%
+  filter(county == "49035") %>%
+  filter(flow > 50) %>%
+  group_by(residence) %>%
+  summarise(flow = sum(flow))
+
+ut_tr <- tigris::tracts("Utah", class = "sf", progress_bar = FALSE) %>%
+  select(GEOID) %>%
+  left_join(sl_workers, by = c("GEOID" = "residence"))
+
+ggplot(ut_tr %>% filter(flow > 0), aes(fill = log(flow))) +
+  geom_sf() + scale_fill_viridis_b()
+```
+
+<img src="man/figures/README-pressure-1.png" width="100%" />

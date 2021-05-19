@@ -51,12 +51,28 @@ The `aggregate_flows` function will aggregate the flows to a state or county.
 The aggregated margin of error is computed as
 
 $$ \sqrt{\sum_{i=1}^N MOE_i^2}$$
+```{r aggregate}
+aggregate_flows("state")
+```
 
-The results can then be passed into other R formatting functions. 
+The results can then be passed into other R formatting functions. For instance,
+we could make a plot of where workers into Salt Lake County reside.
 
 ```{r pressure}
-aggregate_flows("state") %>%
-  filter(residence == "49") %>% #utah residents
-  filter(flow > 1000)
+# get workplaces in salt lake county
+sl_workers <- ctpp_flows %>%
+  mutate(county = str_c(get_state(workplace), get_county(workplace))) %>%
+  filter(county == "49035") %>%
+  filter(flow > 50) %>%
+  group_by(residence) %>%
+  summarise(flow = sum(flow))
+
+ut_tr <- tigris::tracts("Utah", class = "sf", progress_bar = FALSE) %>%
+  select(GEOID) %>%
+  left_join(sl_workers, by = c("GEOID" = "residence"))
+
+ggplot(ut_tr %>% filter(flow > 0), aes(fill = log(flow))) +
+  geom_sf() + scale_fill_viridis_b()
 ```
+
 
